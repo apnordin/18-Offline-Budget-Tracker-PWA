@@ -1,16 +1,15 @@
 console.log("Your service-worker.js file is working");
 
-
 // Set up cache files
 const FILES_TO_CACHE = [
     "/",
-    "/db.js",
     "/index.html",
     "/styles.css",
     "/index.js",
     "/icons/icon-192x192.png",
     "/icons/icon-512x512.png",
-    "/manifest.webmanifest"
+    "/manifest.webmanifest",
+    "/db.js"
 ];
 
 
@@ -39,7 +38,7 @@ self.addEventListener("activate", event => {
       caches
       .keys()
       .then(cacheNames => {
-        // Return array of cache names to be deleted
+        
         return cacheNames.filter(
             cacheName => !currentCaches.includes(cacheName)
             );
@@ -59,14 +58,6 @@ self.addEventListener("activate", event => {
 // Modify our service worker to handle requests to /api, store those responses in our cache to access later
 
 self.addEventListener("fetch", event => {
-    // Non GET requests are not cached and requests to other origins are not cached
-    if (
-        event.request.method !== "GET" ||
-        !event.request.url.startsWith(self.location.origin)
-        ) {
-            event.respondWith(fetch(event.request));
-            return;
-        }
 
         // Handle runtime GET requests for data from /api routes
         if (event.request.url.includes("/api/transaction")) {
@@ -75,7 +66,7 @@ self.addEventListener("fetch", event => {
                 caches.open(RUNTIME_CACHE).then(cache => {
                     return fetch(event.request)
                     .then(response => {
-                        cache.put(event.request, response.clone());
+                        cache.put(event.request.url, response.clone());
                         return response;
                     })
                     .catch(() => caches.match(event.request));
