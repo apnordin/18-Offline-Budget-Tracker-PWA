@@ -1,7 +1,7 @@
 console.log('IS THIS WORKING?');
 
 // Open the indexedDB
-const request = window.indexedDB.open("budget", 4);
+const request = window.indexedDB.open("budget", 5);
 
 let db;
 
@@ -12,7 +12,6 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
-    
     if (navigator.onLine) {
         checkDatabase();
     }
@@ -25,9 +24,6 @@ request.onerror = function(event) {
 function saveRecord(record) {
     const transaction = db.transaction(["pending"], "readwrite");
     const store = transaction.objectStore("pending");
-    console.log("transaction: ", transaction);
-    console.log("store: ", store);
-    console.log("record: ", record);
     store.add(record);
 };
 
