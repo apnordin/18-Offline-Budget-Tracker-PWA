@@ -1,9 +1,18 @@
 console.log('IS THIS WORKING?');
 
+
+// Fixed error of inability to add on IDBObject Store by referencing this: https://www.raymondcamden.com/2012/04/26/Sample-of-IndexedDB-with-Autogenerating-Keys
+
+const indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+
+const IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+
 // Open the indexedDB
-const request = window.indexedDB.open("budget", 5);
+const request = indexedDB.open("budget", 6);
 
 let db;
+
+function init() {
 
 request.onupgradeneeded = function(event) {
     const db = event.target.result;
@@ -12,6 +21,7 @@ request.onupgradeneeded = function(event) {
 
 request.onsuccess = function(event) {
     db = event.target.result;
+    
     if (navigator.onLine) {
         checkDatabase();
     }
@@ -21,11 +31,7 @@ request.onerror = function(event) {
     console.log(event.target.errorCode);
 };
 
-function saveRecord(record) {
-    const transaction = db.transaction(["pending"], "readwrite");
-    const store = transaction.objectStore("pending");
-    store.add(record);
-};
+
 
 function checkDatabase() {
 
@@ -55,4 +61,14 @@ function checkDatabase() {
     }
 }
 
+function saveRecord(record) {
+    const transaction = db.transaction(["pending"], IDBTransaction.READ_WRITE);
+    const store = transaction.objectStore("pending");
+    store.add(record);
+};
+
 window.addEventListener("online", checkDatabase);
+
+}
+
+init();
