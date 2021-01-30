@@ -31,7 +31,7 @@ npm i
 
 ## Usage
 
-Please navigate to [https://frozen-inlet-99109.herokuapp.com/](https://frozen-inlet-99109.herokuapp.com/) in order to use the application. It can be downloaded from your browser as a Progressive Web Application and used in offline mode.
+Please navigate to [https://budget-tracker-pwa-18.herokuapp.com/](https://budget-tracker-pwa-18.herokuapp.com/) in order to use the application. It can be downloaded from your browser as a Progressive Web Application and used in offline mode.
 
 This application is deployed to Heroku using MongoDB Atlas.
 
